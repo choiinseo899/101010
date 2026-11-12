@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jacquees — King of R&amp;B</title>
+  <meta name="description" content="Jacquees — 애틀랜타의 R&B 싱어송라이터. 음악, 앨범, 투어, 그리고 가사와 함께 듣는 쇼케이스.">
+  <meta name="theme-color" content="#000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="is-loading">
+
+  <!-- 은은하게 움직이는 배경 그라데이션 -->
+  <div class="ambient" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+    <span class="blob b4"></span>
+    <div class="grain"></div>
+  </div>
+
+  <!-- 인트로: 필름 리더 카운트 -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-slate">
+      <span class="mono">REEL 01</span>
+      <span class="mono">JACQUEES</span>
+      <span class="mono">TAKE <b id="loaderTake">00</b></span>
+    </div>
+    <div class="loader-count" id="loaderCount">0</div>
+    <div class="loader-ring"></div>
+    <div class="loader-bar"><i id="loaderBar"></i></div>
+  </div>
+
+  <!-- 커스텀 커서 -->
+  <div class="cursor" id="cursor" aria-hidden="true">
+    <div class="cursor-ring"><span class="cursor-label" id="cursorLabel"></span></div>
+    <div class="cursor-dot"></div>
+  </div>
+
+  <div class="scroll-line" id="scrollLine" aria-hidden="true"></div>
+
+  <a href="#top" class="logo" id="logo" data-cursor="TOP">Jacquees</a>
+
+  <nav class="nav-cluster" aria-label="Primary">
+    <a href="#music" class="ghost" data-magnetic>Music</a>
+    <a href="#about" class="ghost" data-magnetic>About</a>
+    <a href="#albums" class="ghost" data-magnetic>Albums</a>
+    <a href="#live" class="ghost" data-magnetic>Live</a>
+    <button class="circle-btn" id="navLyrics" aria-label="가사 화면 열기" data-cursor="LYRICS" data-magnetic>
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4h10M3 8h7M3 12h9" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+    </button>
+  </nav>
+
+  <!-- 미니 플레이어 -->
+  <div class="mini" id="mini">
+    <button class="circle-btn mini-play" id="miniPlay" aria-label="재생" data-cursor="PLAY">
+      <svg class="i-play" viewBox="0 0 16 16"><path d="M5 3.5v9l7-4.5z" fill="currentColor"/></svg>
+      <svg class="i-pause" viewBox="0 0 16 16"><path d="M4.5 3.5h2.5v9H4.5zM9 3.5h2.5v9H9z" fill="currentColor"/></svg>
+    </button>
+    <canvas class="mini-viz" id="miniViz" width="56" height="18"></canvas>
+    <button class="mini-meta" id="miniMeta" data-cursor="LYRICS">
+      <span class="mini-title" id="miniTitle">B.E.D.</span>
+      <span class="mono mini-sub" id="miniSub">PRESS PLAY</span>
+    </button>
+    <span class="mono mini-time" id="miniTime">0:00</span>
+    <button class="mini-skip mono" id="miniPrev" aria-label="이전 곡">PREV</button>
+    <button class="mini-skip mono" id="miniNext" aria-label="다음 곡">NEXT</button>
+  </div>
+  <div class="play-line" aria-hidden="true"><i id="playLine"></i></div>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+      <div class="hero-wall" id="heroWall" aria-hidden="true">
+        <div class="wall-row" data-dir="1"></div>
+        <div class="wall-row" data-dir="-1"></div>
+        <div class="wall-row" data-dir="1"></div>
+      </div>
+      <div class="hero-beam" aria-hidden="true"></div>
+      <canvas class="hero-dust" id="heroDust" aria-hidden="true"></canvas>
+
+      <div class="hero-top mono">
+        <span data-scramble>R&amp;B / SOUL</span>
+        <span data-scramble>DECATUR, GEORGIA</span>
+        <span data-scramble>CASH MONEY RECORDS</span>
+      </div>
+
+      <h1 class="hero-word" id="heroWord" aria-label="Jacquees">Jacquees</h1>
+
+      <div class="hero-bottom">
+        <p class="hero-lede">
+          애틀랜타의 밤을 노래하는 목소리.<br>
+          <span class="dim">The voice that turns the lights down low.</span>
+        </p>
+        <button class="hero-cue ghost" id="heroCue" data-cursor="PLAY">
+          <span class="mono">NOW SHOWING —</span> 『MOOD 2』 · Accuse Me ▸
+        </button>
+      </div>
+      <div class="hero-scroll mono" aria-hidden="true"><span>SCROLL</span><i></i></div>
+    </section>
+
+    <!-- MANIFESTO -->
+    <section class="manifesto" id="manifesto">
+      <span class="mono idx">001 — STATEMENT</span>
+      <p class="display words" data-words>Born in Decatur. Raised on Atlanta nights. A voice that turns every room into a slow jam.</p>
+      <p class="ko-sub" data-reveal>디케이터에서 태어나 애틀랜타의 밤에서 자란 목소리. 그가 노래를 시작하면, 어떤 방이든 슬로우 잼이 된다.</p>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+      <header class="sec-head" data-reveal>
+        <span class="mono idx">002 — ABOUT</span>
+        <h2 class="heading">The Artist</h2>
+      </header>
+
+      <div class="about-grid">
+        <dl class="facts" data-reveal>
+          <div><dt class="mono">NAME</dt><dd>Rodriquez Jacquees Broadnax</dd></div>
+          <div><dt class="mono">SAY IT</dt><dd>jah-KWEESS · 자퀴스</dd></div>
+          <div><dt class="mono">BORN</dt><dd>4월 15일 · Decatur, Georgia</dd></div>
+          <div><dt class="mono">BASE</dt><dd>Atlanta, GA</dd></div>
+          <div><dt class="mono">GENRE</dt><dd>R&amp;B · Hip-Hop</dd></div>
+          <div><dt class="mono">LABEL</dt><dd>Cash Money Records · Rich Gang</dd></div>
+          <div><dt class="mono">ACTIVE</dt><dd>2010 — Present</dd></div>
+        </dl>
+
+        <div class="bio">
+          <p class="bio-lead" data-reveal>
+            Jacquees는 조지아주 디케이터 출신, 애틀랜타를 기반으로 활동하는 R&amp;B 싱어송라이터다. 부드럽게 휘어지는 팔세토와 거리의 리듬을 동시에 가진 그는, 2010년대 중반 이후 남부 R&amp;B의 얼굴이 되었다.
+          </p>
+          <p data-reveal>
+            2014년 EP 『19』로 빌보드 Top R&amp;B Albums 15위에 데뷔했고, 같은 해 Cash Money Records와 계약하며 Rich Gang에 합류했다. 2016년 믹스테입 『Mood』와 싱글 “B.E.D.”로 이름을 알렸고, 2018년 데뷔 정규 『4275』는 Billboard 200 35위, R&amp;B 앨범 차트 3위에 올랐다.
+          </p>
+          <p data-reveal>
+            2018년 말, 그는 스스로를 “이 세대의 King of R&amp;B”라 선언해 큰 논쟁을 불렀다. 이듬해 같은 이름의 정규 『King of R&amp;B』(Billboard 200 20위)로 답했고, 30개 도시 투어로 그 이름을 무대 위에 올렸다. 이후 Future가 총괄 프로듀싱한 『Sincerely For You』(2022), 아버지가 된 뒤의 『Baby Making』(2024), DeJ Loaf와의 『F**k A Friendzone 2』(2025)를 거쳐 2026년 여름, 22곡짜리 『MOOD 2』로 자신의 출발점을 다시 노래했다.
+          </p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat" data-reveal><b data-count="58" data-prefix="#">0</b><span class="mono">HOT 100 PEAK — “YOU”</span></div>
+        <div class="stat" data-reveal><b data-count="20" data-prefix="#">0</b><span class="mono">BILLBOARD 200 — KING OF R&amp;B</span></div>
+        <div class="stat" data-reveal><b data-count="6">0</b><span class="mono">STUDIO &amp; JOINT ALBUMS</span></div>
+        <div class="stat" data-reveal><b data-count="16" data-suffix="y">0</b><span class="mono">YEARS ACTIVE</span></div>
+      </div>
+
+      <div class="palette-block">
+        <div class="palette-head" data-reveal>
+          <span class="mono idx">MOOD PALETTE</span>
+          <p>Jacquees의 음악은 늘 <em>밤</em>에 있다. 낮게 깔린 와인빛 조명, 촛불 같은 보컬의 온기, 새벽 하늘의 보랏빛, 그리고 스스로 쓴 왕관의 금색. 이 사이트의 배경은 그 네 가지 색으로 천천히 숨 쉰다 — 곡을 재생하면 앨범 커버의 색으로 물든다.</p>
+        </div>
+        <div class="swatches" id="swatches"></div>
+      </div>
+    </section>
+
+    <!-- TIMELINE (가로 스크롤) -->
+    <section class="timeline" id="timeline">
+      <div class="tl-sticky">
+        <header class="tl-head">
+          <span class="mono idx">003 — TIMELINE</span>
+          <span class="mono tl-progress" id="tlProgress">2007</span>
+        </header>
+        <div class="tl-track" id="tlTrack"></div>
+        <div class="tl-rail"><i id="tlRail"></i></div>
+      </div>
+    </section>
+
+    <!-- MUSIC -->
+    <section class="music" id="music">
+      <header class="sec-head pad" data-reveal>
+        <span class="mono idx">004 — MUSIC</span>
+        <h2 class="heading">Selected Work</h2>
+        <p class="sec-note">타일을 누르면 재생과 함께 가사 화면이 열립니다. <span class="mono">SPACE</span> 재생/정지 · <span class="mono">L</span> 가사</p>
+      </header>
+      <div class="work-grid" id="workGrid"></div>
+
+      <div class="tracklist-wrap">
+        <div class="tl-list-head mono">
+          <span>#</span><span>TITLE</span><span class="hide-sm">RELEASE</span><span class="hide-sm">YEAR</span><span>TIME</span>
+        </div>
+        <ol class="tracklist" id="tracklist"></ol>
+      </div>
+    </section>
+
+    <!-- 두 번째 선언 -->
+    <section class="manifesto alt">
+      <span class="mono idx">005 — THE CROWN</span>
+      <p class="display words" data-words>He called himself the King of R&amp;B — then kept singing until the room stopped arguing.</p>
+      <p class="ko-sub" data-reveal>스스로 왕관을 썼고, 논쟁이 잦아들 때까지 노래를 멈추지 않았다.</p>
+    </section>
+
+    <!-- ALBUMS -->
+    <section class="albums" id="albums">
+      <header class="sec-head pad" data-reveal>
+        <span class="mono idx">006 — DISCOGRAPHY</span>
+        <h2 class="heading">Albums</h2>
+        <p class="sec-note">커버에 마우스를 올리면 레코드가 나옵니다. 누르면 대표곡을 재생합니다.</p>
+      </header>
+      <div class="album-grid" id="albumGrid"></div>
+    </section>
+
+    <!-- COLLABORATORS -->
+    <section class="marquee-sec" aria-label="Collaborators">
+      <span class="mono idx pad">007 — IN THE ROOM WITH</span>
+      <div class="marquee" id="marquee"><div class="marquee-track" id="marqueeTrack"></div></div>
+    </section>
+
+    <!-- LIVE -->
+    <section class="live" id="live">
+      <header class="sec-head pad" data-reveal>
+        <span class="mono idx">008 — LIVE</span>
+        <h2 class="heading">On Stage</h2>
+      </header>
+
+      <div class="tour-tabs" id="tourTabs" role="tablist"></div>
+      <p class="tour-note" id="tourNote"></p>
+      <ul class="shows" id="shows"></ul>
+
+      <div class="chart" data-reveal>
+        <div class="chart-head">
+          <span class="mono idx">SHOWS PER YEAR</span>
+          <span class="mono chart-read" id="chartRead">HOVER A BAR</span>
+        </div>
+        <div class="bars" id="bars"></div>
+        <p class="mono chart-src">SOURCE — CONCERT ARCHIVES (기록된 공연 기준)</p>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="footer">
+      <p class="display footer-word" data-reveal>Sincerely,<br>for you.</p>
+      <div class="footer-row">
+        <div class="footer-links">
+          <a class="ghost" href="https://www.jacqueeslive.com" target="_blank" rel="noopener">Official Site ↗</a>
+          <a class="ghost" href="https://music.apple.com/us/artist/jacquees/386779763" target="_blank" rel="noopener">Apple Music ↗</a>
+          <a class="ghost" href="#top">Back to top ↑</a>
+        </div>
+        <p class="mono footer-credit">
+          UNOFFICIAL FAN SHOWCASE · AUDIO PREVIEWS &amp; ARTWORK VIA APPLE ITUNES · SYNCED LYRICS VIA LRCLIB.NET
+        </p>
+      </div>
+    </footer>
+  </main>
+
+  <!-- 가사 화면 (Apple Music 스타일) -->
+  <div class="lyrics" id="lyrics" aria-hidden="true" role="dialog" aria-label="가사">
+    <div class="lx-bg" aria-hidden="true">
+      <div class="lx-art-blur a1" id="lxBlur1"></div>
+      <div class="lx-art-blur a2" id="lxBlur2"></div>
+      <span class="lx-blob l1"></span>
+      <span class="lx-blob l2"></span>
+      <span class="lx-blob l3"></span>
+      <div class="lx-shade"></div>
+    </div>
+
+    <button class="circle-btn lx-close" id="lxClose" aria-label="닫기" data-cursor="CLOSE">
+      <svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.2"/></svg>
+    </button>
+
+    <div class="lx-left">
+      <div class="lx-art-wrap">
+        <img class="lx-art" id="lxArt" alt="" crossorigin="anonymous">
+      </div>
+      <span class="mono lx-tag" id="lxTag">NOW PLAYING</span>
+      <h3 class="lx-title" id="lxTitle">—</h3>
+      <p class="lx-artist" id="lxArtist">Jacquees</p>
+
+      <div class="lx-progress" id="lxProgress" data-cursor="SEEK">
+        <div class="lx-progress-fill" id="lxFill"></div>
+      </div>
+      <div class="lx-times mono"><span id="lxCur">0:00</span><span id="lxMode">PREVIEW</span><span id="lxDur">0:30</span></div>
+
+      <div class="lx-controls">
+        <button class="lx-btn" id="lxPrev" aria-label="이전 곡" data-cursor="PREV">
+          <svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z" fill="currentColor"/></svg>
+        </button>
+        <button class="lx-btn lx-main" id="lxPlay" aria-label="재생/정지" data-cursor="PLAY">
+          <svg class="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="currentColor"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24"><path d="M6 4.5h4v15H6zM14 4.5h4v15h-4z" fill="currentColor"/></svg>
+        </button>
+        <button class="lx-btn" id="lxNext" aria-label="다음 곡" data-cursor="NEXT">
+          <svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z" fill="currentColor"/></svg>
+        </button>
+      </div>
+
+      <div class="lx-sync mono" id="lxSync">
+        <span>SYNC</span>
+        <button id="syncMinus" aria-label="가사 0.5초 빠르게">−0.5s</button>
+        <b id="syncVal">+0.0s</b>
+        <button id="syncPlus" aria-label="가사 0.5초 늦게">+0.5s</button>
+        <button id="syncReset">AUTO</button>
+      </div>
+      <p class="lx-hint" id="lxHint">미리듣기(30초) 구간이에요. 가사 줄을 누르면 그 줄에 싱크를 맞춥니다. 전체 곡 파일(mp3·m4a)을 이 화면에 끌어다 놓으면 처음부터 정확한 싱크로 재생돼요.</p>
+    </div>
+
+    <div class="lx-right" id="lxRight">
+      <div class="lx-lines" id="lxLines"></div>
+      <div class="lx-status" id="lxStatus"></div>
+    </div>
+  </div>
+
+  <!-- 드래그 앤 드롭 안내 -->
+  <div class="dropzone" id="dropzone" aria-hidden="true">
+    <div class="dz-inner">
+      <span class="mono">DROP AUDIO FILE</span>
+      <p class="display">Play the full track.</p>
+      <p class="ko-sub">파일 이름에 곡 제목이 있으면 그 곡으로, 없으면 지금 곡의 전체 버전으로 재생합니다.</p>
+    </div>
+  </div>
+
+  <div class="toast mono" id="toast" role="status" aria-live="polite"></div>
+
+  <audio id="audio" crossorigin="anonymous" preload="none"></audio>
+
+  <script src="js/data.js"></script>
+  <script src="js/player.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
